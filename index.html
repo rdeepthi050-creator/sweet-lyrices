@@ -1,65 +1,83 @@
-"use client"
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sweet Lyrics Reveal</title>
 
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Background from '@/components/Background';
-import Screen1 from '@/components/screens/Screen1';
-import Screen2 from '@/components/screens/Screen2';
-import FinalScreen from '@/components/screens/FinalScreen';
-import LyricsScreen from '@/components/screens/LyricsScreen';
-
-export default function Home() {
-  const [currentScreen, setCurrentScreen] = useState(0);
-  const audioRef = useRef(null);
-
-  const handleStartMusic = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.6;
-      audioRef.current.play().catch(err => console.log("Audio play failed:", err));
-    }
-    setCurrentScreen(2);
-  };
-
-  const screens = [
-    <Screen1 key="screen1" onNext={() => setCurrentScreen(1)} />,
-    <Screen2 key="screen2" onNext={handleStartMusic} />,
-    <LyricsScreen key="screen3" onComplete={() => setCurrentScreen(3)} />,
-    <FinalScreen key="screen4" />
-  ]
-
-  return (
-    <div className="min-h-screen text-pink-50 flex items-center justify-center overflow-hidden relative">
-      <Background />
-
-      <audio
-        ref={audioRef}
-        src="/audio/bg.mp3"
-        preload="auto"
-      />
-
-      <div className="relative z-10 w-full max-w-100 p-5">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentScreen}
-            initial={{ opacity: 0, scale: 0.85, y: 40, filter: "blur(10px)" }}
-            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", transition: { type: "spring", stiffness: 150, damping: 20 } }}
-            exit={{ opacity: 0, scale: 0.9, y: -30, filter: "blur(10px)", transition: { duration: 0.4, ease: "easeInOut" } }}
-          >
-            {screens[currentScreen]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Watermark */}
-      <motion.div
-        initial={{ x: 80, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{
-          duration: 0.4,
-        }}
-        className="fixed bottom-4 right-4 text-sm text-white/40 pointer-events-none z-50 font-light">
-        @anujbuilds
-      </motion.div>
-    </div>
-  );
+<style>
+body{
+background:#ffe6f2;
+font-family:Arial;
+text-align:center;
+padding-top:100px;
 }
+
+button{
+padding:15px 25px;
+font-size:18px;
+border:none;
+background:#ff4da6;
+color:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+#lyrics{
+display:none;
+font-size:22px;
+margin-top:40px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>❤️ I made something for you</h1>
+
+<p>Click the button</p>
+
+<button onclick="start()">Start</button>
+
+<br><br>
+
+<audio id="song">
+<source src="bg.mp3" type="audio/mpeg">
+</audio>
+
+<img id="gif" src="holding.gif" width="250" style="display:none">
+
+<div id="lyrics"></div>
+
+<script>
+
+const lines = [
+"Every moment with you feels special 💖",
+"I don't know how you do it...",
+"But you make everything brighter ✨",
+"So I made this just for you 🎶"
+]
+
+function start(){
+
+document.getElementById("song").play()
+
+document.getElementById("gif").style.display="block"
+
+let i=0
+let box=document.getElementById("lyrics")
+
+box.style.display="block"
+
+setInterval(()=>{
+if(i<lines.length){
+box.innerHTML += lines[i] + "<br>"
+i++
+}
+},2000)
+
+}
+
+</script>
+
+</body>
+</html>
